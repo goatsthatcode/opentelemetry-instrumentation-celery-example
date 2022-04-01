@@ -1,0 +1,11 @@
+celery==5.0.5
+fastapi>=0.68.0,<0.69.0
+redis==3.5.3
+uvicorn>=0.15.0,<0.16.0
+
+opentelemetry-api==1.10.0
+opentelemetry-sdk==1.10.0
+opentelemetry-instrumentation==0.29b0
+opentelemetry-exporter-otlp==1.10.0
+opentelemetry-distro==0.29b0
+opentelemetry-distro[otlp]
