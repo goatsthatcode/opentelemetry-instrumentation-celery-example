@@ -1,10 +1,13 @@
-from celery import group
+import os
+from celery import group, Celery
 from fastapi import FastAPI
 from opentelemetry.instrumentation.celery import CeleryInstrumentor
 
-import task
-
 app = FastAPI()
+c = Celery(
+    broker=os.environ['BROKER_URL'],
+    backend=os.environ['RESULT_BACKEND'],
+)
 CeleryInstrumentor().instrument()
 
 
@@ -23,10 +26,8 @@ async def add(x, y):
     if (_x, _y) != (float(x), float(y)):
         return {"error": "input must be integer"}
 
-    result = task.add.delay(_x, _y)
-
     futures = group(
-        task.app.signature(
+        c.signature(
             "task.add", args=(_x, _y)
         )
         for _ in range(10)
